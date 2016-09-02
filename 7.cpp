@@ -3,10 +3,13 @@
 //What is the 10 001st prime number?
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
 
 #define LASTNUM 10001
 
-using std::vector;
+using std::vector;		using std::lower_bound;
 
 int main(){
 	
@@ -15,19 +18,33 @@ int main(){
 	primes.reserve(LASTNUM);
 
 	//The current number checked for being prime.
-	long currentNum = 2;
+	long primeCounter = 0;
 	//Loop invarinat: primeCounter contains the current number of prime numbers in primes.
-	for (int primeCounter = 0; primeCounter < LASTNUM; primeCounter++){
+	for (long currentNum = 2 ; primeCounter < LASTNUM; currentNum++){
 		
 		//Finding the next prime number by performing a binary search for each new number on primes.
-		bool isPrime = false;
-		while (!isPrime){
-			//Finding the closets number to currentNum in primes by performing a binary search on primes.
-			
-			//Checking currentNum against all the numbers from the start to closestNum.
+		//Finding the closets number to currentNum in primes by performing a binary search on primes.
+		vector<long>::const_iterator closestNum = lower_bound(primes.begin(), primes.end(), sqrt(currentNum));
+		//Checking currentNum against all the numbers from the start to closestNum.
+		bool isPrime = true;
+		//In case sqrt(currentNum) == *closetNum
+		if (closestNum != primes.end() && sqrt(currentNum) == *closestNum)
+			isPrime = false;
+		else{
+			for (vector<long>::const_iterator it = primes.begin(); it != closestNum; it++){
+				if(currentNum % *it == 0){
+					isPrime = false;
+					break;
+				}
+			}
 		}
-		
+		if (isPrime == true){
+			primes.push_back(currentNum);
+			primeCounter++;
+		}
 	}
+	
+	printf("The %dst prime number is : %ld \n", LASTNUM, *(primes.end()-1) );
 
 	return 0;
 
