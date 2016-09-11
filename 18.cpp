@@ -29,20 +29,26 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <fstream>
 
-using std::vector;
+using std::vector;		using std::max_element;
+using std::string;		
+
+vector<vector<int> > ReadData(string filename, int &numRow);
 
 int main(){
 		//Reading the data.
 		int numRow;
-		vector<vector<int> > numbers = ReadData(numRow);
+		vector<vector<int> > numbers = ReadData("18.dat", numRow);
 		//Defining a vector containing the best sums for each element of each row.
 		vector<vector<long> > bestSums(numRow);
 
 		//For each row, calculating the best sum for each element by comparing the value of the parents.
-		bestSums.push_back(numbers[0]);
+		//The only element on the first row.
+		bestSums[0].push_back(numbers[0][0]);
 		for (int rowCounter = 1; rowCounter < numRow; rowCounter++){
-				vector<int> &row = bestSums[rowCounter];
+				vector<long> &row = bestSums[rowCounter];
 				//Special case: First element:
 				row.push_back(numbers[rowCounter-1][0]+numbers[rowCounter][0]);
 				//General case:
@@ -51,13 +57,36 @@ int main(){
 						bestSums[rowCounter].push_back(bestPreviousSum+row[elementCounter]);
 				}
 
+				//Special case: last element
+				row.push_back(numbers[rowCounter-1][row.size()-2]+numbers[rowCounter][row.size()-1]);	
 		}
-		//Special case: last element
+
 		//Outputting the max sum as the largest element in the last row.
+		vector<long>::iterator max_elem = max_element(bestSums[numRow-1].begin(), bestSums[numRow-1].end());
 
+		std::cout << "The largest path sum is : " << *max_elem << std::endl;
+		
+		return 0;
+}
+
+vector<vector<int> > ReadData(string filename, int &numRow){
 	
+	std::ifstream filep(filename);
 
+	vector <vector<int> > out;
 
+	string line;
+	numRow = 0;
+	while(getline(filep, line)){
+		numRow++;
+		vector<string> tmp = split(line);
+		vector<int> tmpNum;
+		for(vector<string>::iterator it = tmp.begin(); it != tmp.end(); it++)
+			tmpNum.push_back(std::stoi(*it));
 
+		out.push_back(tmpNum);
+	}
+
+	return out;
 
 }
