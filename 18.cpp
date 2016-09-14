@@ -32,6 +32,8 @@
 #include <algorithm>
 #include <fstream>
 
+#include "readData.h"
+
 using std::vector;		using std::max_element;
 using std::string;		
 
@@ -69,24 +71,3 @@ int main(){
 		return 0;
 }
 
-vector<vector<int> > ReadData(string filename, int &numRow){
-	
-	std::ifstream filep(filename);
-
-	vector <vector<int> > out;
-
-	string line;
-	numRow = 0;
-	while(getline(filep, line)){
-		numRow++;
-		vector<string> tmp = split(line);
-		vector<int> tmpNum;
-		for(vector<string>::iterator it = tmp.begin(); it != tmp.end(); it++)
-			tmpNum.push_back(std::stoi(*it));
-
-		out.push_back(tmpNum);
-	}
-
-	return out;
-
-}
