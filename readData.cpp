@@ -50,8 +50,7 @@ vector<string> split(string &line, char delim){
 				if ((first = find_if(first, end, is_alphanum)) == end )
 						break;
 				//second is set to the next non alphanum char.
-				if ((second = find_if_not(first, end, is_alphanum)) == end )
-						break;
+				second = find_if_not(first, end, is_alphanum);
 
 				out.push_back(string(first, second));
 				first = second;
