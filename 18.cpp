@@ -90,3 +90,11 @@ vector<vector<int> > ReadData(string filename, int &numRow){
 	return out;
 
 }
+
+vector<string> split(string in, char delim){
+
+	vector<string> out;
+	
+	
+
+}
