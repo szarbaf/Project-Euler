@@ -32,6 +32,8 @@
 #include <algorithm>
 #include <fstream>
 
+#include "readData.h"
+
 using std::vector;		using std::max_element;
 using std::string;		
 
@@ -40,7 +42,7 @@ vector<vector<int> > ReadData(string filename, int &numRow);
 int main(){
 		//Reading the data.
 		int numRow;
-		vector<vector<int> > numbers = ReadData("18.dat", numRow);
+		vector<vector<int> > numbers = ReadData("p067_triangle.txt", numRow);
 		//Defining a vector containing the best sums for each element of each row.
 		vector<vector<long> > bestSums(numRow);
 
@@ -48,17 +50,19 @@ int main(){
 		//The only element on the first row.
 		bestSums[0].push_back(numbers[0][0]);
 		for (int rowCounter = 1; rowCounter < numRow; rowCounter++){
-				vector<long> &row = bestSums[rowCounter];
+				vector<long> &prevRow = bestSums[rowCounter-1];
+				vector<long> &curRow = bestSums[rowCounter];
 				//Special case: First element:
-				row.push_back(numbers[rowCounter-1][0]+numbers[rowCounter][0]);
+				curRow.push_back(prevRow[0]+numbers[rowCounter][0]);
 				//General case:
-				for (int elementCounter = 1; elementCounter < row.size()-1; elementCounter++){
-						long bestPreviousSum = row[elementCounter-1] ? row[elementCounter-1] > row[elementCounter] :  row[elementCounter];
-						bestSums[rowCounter].push_back(bestPreviousSum+row[elementCounter]);
+				int rowSize = numbers[rowCounter].size();
+				for (int elementCounter = 1; elementCounter < rowSize-1; elementCounter++){
+						long bestPreviousSum = prevRow[elementCounter-1] > prevRow[elementCounter] ? prevRow[elementCounter-1] :  prevRow[elementCounter];
+						curRow.push_back(bestPreviousSum+numbers[rowCounter][elementCounter]);
 				}
 
 				//Special case: last element
-				row.push_back(numbers[rowCounter-1][row.size()-2]+numbers[rowCounter][row.size()-1]);	
+				curRow.push_back(prevRow[rowSize-2]+numbers[rowCounter][rowSize-1]);	
 		}
 
 		//Outputting the max sum as the largest element in the last row.
@@ -68,6 +72,7 @@ int main(){
 		
 		return 0;
 }
+
 
 vector<vector<int> > ReadData(string filename, int &numRow){
 	
@@ -98,3 +103,4 @@ vector<string> split(string in, char delim){
 	
 
 }
+
