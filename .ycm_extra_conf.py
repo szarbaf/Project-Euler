@@ -55,12 +55,10 @@ flags = [
 'c++',
 '-isystem',
 get_python_inc(),
-'-isystem',
-'../llvm/include',
-'-isystem',
-'../llvm/tools/clang/include',
 '-I',
 '.',
+'-I',
+'/usr/include'
 ]
 
 # Clang automatically sets the '-std=' flag to 'c++14' for MSVC 2015 or later,
