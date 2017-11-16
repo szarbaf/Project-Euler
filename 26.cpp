@@ -17,7 +17,9 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <unordered_map>
+#include <math.h>
 
 using namespace std;
 
@@ -25,52 +27,96 @@ using namespace std;
 #define MAXDIGITS 500
 #define MAXNUMREP 10
 
-int main(){
+string FractionDigits(unsigned int num, unsigned int max_digits){
+	string out;
+	for (unsigned int c = 0; c < max_digits; c++){
+		int ten_powers = pow(10, c+1);
+		if (ten_powers % num == 0)
+				return string();
+		int digit = (int)floor( ten_powers / num) % 10;
+		out.push_back((char)('0' + digit));
+	}
 
-	int max_d = 3;
-	int max_rep = 1;
-	for (int i = 4; i < MAXNUM+1; i++){
-		auto digits = FractionDigits(i, MAXDIGITS);
-		if (digits.size() < MAXDIGITS)
-			continue;
-		int c = 0;
-		unordered_map<int, vector<int>> seen;
-		while (c < MAXDIGITS){
-			int d = digits[c];
-			if (seen.find(d) == seen.end()){
-				seen[d].push_back(c);
-				c++;
-				continue;
-			}
-			vector<int> recurrence = seen[d];
-			int j;
-			bool pattern_found = false;
-			int cur_recur;
-			for (j = 0; j < recurrence.size(); j++){
-				cur_recur = recurrence[j];
-				if (CheckPattern(digits, cur_recur, c, MAXDIGITS)){
-					pattern_found = true;
+	return out;
+}
+
+bool IsRepeatedString(string &pattern, string &digits){
+
+		bool is_repeated = true;
+		int num_reps = digits.size() / pattern.size();
+
+		for (int c = 0; (is_repeated && c < num_reps); c++){
+			for (unsigned int i = 0; i < pattern.size(); i++){
+				if (digits[i+c*pattern.size()] != pattern[i]){
+					is_repeated = false;
 					break;
 				}
 			}
+		}
 
-			if (!pattern_found){
-				seen[d].push_back(c);
-				c++;
-				continue;			
-			}
-			int counter = 1;
-			int pattern_length = c-cur_recur;
-			bool pattern_violated = false;
-			while(!pattern_violated && (c+pattern_length) < MAXDIGITS){
-				cur_recur += pattern_length;
-				c += pattern_length; 
-				pattern_violated = !CheckPattern(digits, cur_recur, c);
-			}
-			if (pattern_violated)
+		return is_repeated;
+
+}
+
+bool FindPattern(string &digits, string *pattern){
+
+	unordered_map<char, vector<int>> seen;
+	int counter = 0;
+	bool not_found = true;
+	for (auto it = digits.begin(); not_found && (it != digits.end()); it++){
+		auto seen_places = seen.find(*it);
+		if (seen_places == seen.end()){
+				vector<int> temp(1, counter);
+				seen[*it] = temp;
+		}
+		else{
+				string temp_digits(digits.begin()+counter, digits.end());
+				vector<int> places = seen_places->second;
+				for (auto init_pos = places.begin(); init_pos != places.end(); init_pos++){
+					string temp_pattern(digits.begin()+*init_pos, digits.begin()+counter+1);
+					bool is_repeated = IsRepeatedString(temp_pattern, temp_digits);
+					if (is_repeated){
+						*pattern = temp_pattern;
+						not_found = false;
+						break;
+					}
+				}
+			
+		}
+		counter++;
+	}
+
+	return !not_found;
+
+}
+
+int main(){
+
+		int max_d = 3;
+		unsigned int max_rep = 1;
+		for (int i = 4; i < MAXNUM+1; i++){
+				auto digits = FractionDigits(i, MAXDIGITS);
+				if (digits.size() < MAXDIGITS)
+						continue;
+
+				string pattern;
+				bool is_patterned = FindPattern(digits, &pattern);
+				if (is_patterned){
+						if (pattern.size() > max_rep){
+								max_d = i;
+								max_rep = pattern.size();
+						}
+
+				}
+
+
 
 		}
 
-	}
+		cout << "The number with the largest pattern is : " << max_d << endl;
+		cout << "The pattern lenght is : " << max_rep << endl;
 
+
+		return 0;
 }
+
