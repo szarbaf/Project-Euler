@@ -29,12 +29,23 @@ using namespace std;
 
 string FractionDigits(unsigned int num, unsigned int max_digits){
 	string out;
+	/*
 	for (unsigned int c = 0; c < max_digits; c++){
-		int ten_powers = pow(10, c+1);
+		long double ten_powers = pow(10, c+1);
 		if (ten_powers % num == 0)
 				return string();
 		int digit = (int)floor( ten_powers / num) % 10;
 		out.push_back((char)('0' + digit));
+	}
+	*/
+	long double new_num = 1.0/num;
+	for (unsigned int c = 0; c < max_digits; c++){
+			new_num *= 10;
+			int floored = floor(new_num);
+			if (!(new_num > floored))
+					return string();
+			out.push_back((char)(floored+'0') );
+			new_num -= floored;
 	}
 
 	return out;
@@ -73,7 +84,7 @@ bool FindPattern(string &digits, string *pattern){
 				string temp_digits(digits.begin()+counter, digits.end());
 				vector<int> places = seen_places->second;
 				for (auto init_pos = places.begin(); init_pos != places.end(); init_pos++){
-					string temp_pattern(digits.begin()+*init_pos, digits.begin()+counter+1);
+					string temp_pattern(digits.begin()+*init_pos, digits.begin()+counter);
 					bool is_repeated = IsRepeatedString(temp_pattern, temp_digits);
 					if (is_repeated){
 						*pattern = temp_pattern;
@@ -81,7 +92,7 @@ bool FindPattern(string &digits, string *pattern){
 						break;
 					}
 				}
-			
+				seen[*it].push_back(counter);
 		}
 		counter++;
 	}
