@@ -20,34 +20,58 @@
 #include <string>
 #include <unordered_map>
 #include <math.h>
+#include <gmpxx.h>
+#include <iomanip>
 
 using namespace std;
 
-#define MAXNUM 10
-#define MAXDIGITS 500
+#define MAXNUM 1000
+#define MAXDIGITS 700
 #define MAXNUMREP 10
+
+mpz_class my_power(int base, int power){
+
+	mpz_class out = 1;
+	for(int c = 0; c < power; c++){
+		out *= base;
+	}
+	return out;
+}
 
 string FractionDigits(unsigned int num, unsigned int max_digits){
 	string out;
-	/*
+	mpf_set_default_prec(MAXDIGITS*10);
+	//mpz_set_default(MAXDIGITS*10);
 	for (unsigned int c = 0; c < max_digits; c++){
-		long double ten_powers = pow(10, c+1);
-		if (ten_powers % num == 0)
+		mpz_class ten_powers = my_power(10, c+1);
+		//cout << "My ten powers are : " << ten_powers << endl;
+	 	mpf_class div = ten_powers / mpf_class(num);
+		mpz_class floored(div);
+		if (div == floored)
 				return string();
-		int digit = (int)floor( ten_powers / num) % 10;
+		mpz_class temp = floored % mpz_class(10);
+		int digit = temp.get_si();
 		out.push_back((char)('0' + digit));
 	}
-	*/
-	long double new_num = 1.0/num;
+
+/*
+	mpf_set_default_prec(MAXDIGITS*2);
+	mpf_class a, new_num;
+	a = num;
+	new_num = 1.0/num;
+	mpz_class floored;
+
+	//cout << "1/num is " << setprecision(80) <<new_num << endl;
+	//printf("1/num for num=%d is %.40Lf\n", num, new_num);
 	for (unsigned int c = 0; c < max_digits; c++){
 			new_num *= 10;
-			int floored = floor(new_num);
+			int floored = new_num.get_si();
 			if (!(new_num > floored))
 					return string();
 			out.push_back((char)(floored+'0') );
 			new_num -= floored;
 	}
-
+*/
 	return out;
 }
 
@@ -55,6 +79,8 @@ bool IsRepeatedString(string &pattern, string &digits){
 
 		bool is_repeated = true;
 		int num_reps = digits.size() / pattern.size();
+		if (num_reps <= 4)
+		  return false;
 
 		for (int c = 0; (is_repeated && c < num_reps); c++){
 			for (unsigned int i = 0; i < pattern.size(); i++){
@@ -63,6 +89,11 @@ bool IsRepeatedString(string &pattern, string &digits){
 					break;
 				}
 			}
+		}
+
+		if (is_repeated){
+			cout << "num_reps: " << num_reps << " Pattern: " << pattern << endl;
+
 		}
 
 		return is_repeated;
@@ -107,6 +138,7 @@ int main(){
 		unsigned int max_rep = 1;
 		for (int i = 4; i < MAXNUM+1; i++){
 				auto digits = FractionDigits(i, MAXDIGITS);
+				//string digits = to_string(1.0L/i);
 				if (digits.size() < MAXDIGITS)
 						continue;
 
