@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include "gen_prime.h"
 
 using namespace std;
 
@@ -14,34 +15,17 @@ using namespace std;
 
 typedef long long int ll;
 
-void SetNotPrime(vector<bool> *is_prime, ll num){
-		for (ll c = (num+1)*(num+1)-1; c < MAXNUM; c += num+1)
-				is_prime->at(c) = false;
-}
-
 int main(){
-		vector<bool> is_prime(MAXNUM, true);
 
-		is_prime[1] = true;
-		ll cur_prime = -1;
-		ll cur_prime_counter = 0;
-		for (int num = 1; num < MAXNUM; num++){
-				if (is_prime[num]){
-						SetNotPrime(&is_prime, num);
-						cur_prime = num;
-						cur_prime_counter += 1;
-						if (cur_prime_counter == MAXPRIME)
-								break;
-				}
+  		ll last_prime_index, last_prime;
+		auto is_prime = IsPrime(MAXNUM, MAXPRIME, &last_prime_index, &last_prime);
 
-		}
-
-		if (cur_prime_counter == MAXPRIME)
+		if (last_prime_index == MAXPRIME)
 				cout << "The " << MAXPRIME << "th prime number is : " 
-						<< cur_prime+1 << endl;
+						<< last_prime << endl;
 		else
 				cout << "The maximum number is insufficient. The current prime number counter is "
-						<< cur_prime_counter << endl;
+						<< last_prime_index << endl;
 
 		return 0;
 }
