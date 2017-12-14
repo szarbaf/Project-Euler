@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 typedef long long int ll;
 
 using namespace std;
@@ -29,3 +30,31 @@ vector<bool> IsPrime(ll max_num, ll max_prime, ll *last_prime_index, ll *last_pr
 		return is_prime;
 }
 
+
+vector<ll> FindDivisors(ll num){
+	ll max_num = sqrt(num);
+	vector<ll> output(max_num*2);
+
+	
+	ll counter = 0;
+	for (ll c = 1; c < max_num+1; c++){
+		if (num%c == 0)
+				output[counter++] = c;
+	}
+
+	//Adding the complements
+	for (ll c = 0; c < counter; c++){
+		if (output[c] != max_num){
+			output[c+counter] = num / output[counter - 1 - c];
+		}
+	}
+
+	//Resizing
+	if (max_num*max_num != num)
+			output.resize(2*counter);
+	else
+			output.resize(2*counter-1);
+
+
+	return output;
+}

@@ -17,7 +17,7 @@
 #include <iostream>
 #include <vector>
 
-#include "gen_prime.h"
+#include "my_lib.h"
 
 #define MAXN 1000
 #define MAXNUM 1e7

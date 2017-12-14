@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <vector>
-#include "gen_prime.h"
+#include "my_lib.h"
 
 using namespace std;
 
