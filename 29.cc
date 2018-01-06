@@ -13,7 +13,110 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_set>
+#include <map>
+#include <cmath>
+
+
+#define MAXNUM 100
+
+using namespace std;
+
+//The first element is the prime number and the second is the times it has been repeated. 
+typedef pair<int, int> pair_t;
+typedef map<int, int> factors_t;
+
+typedef struct my_hash{
+	size_t operator() (factors_t key) const{
+	  size_t out = 0;
+	  for(auto it = key.begin(); it != key.end(); it++)
+		out = it->first*it->second;
+	  return out;
+	}
+} hash_t;
+
+inline bool operator==(const factors_t& first, const factors_t& second) {
+	if (first.size() != second.size())
+	  return false;
+
+	factors_t::const_iterator it1, it2;
+	for (it1 = first.begin(), it2 = second.begin(); it1 != first.end() && it2 != second.end(); it1++, it2++){
+		if((it1->first != it2->second) || (it1->second != it2->second))
+		  return false;
+	}
+
+	return true;
+}
+
+inline bool operator!=(const factors_t& first, const factors_t& second) {
+	return !(first == second);
+}
+
+factors_t FindFactors(int base){
+	factors_t out;
+  	//Extracting the powers two
+	while(base%2 == 0){
+	  auto it = out.find(2);
+		if (it != out.end())
+		  it->second++;
+		else
+		  out.insert(pair_t(2, 1));
+		base = base/2;
+	}
+
+
+	//Extracting the powers starting from three
+	for (int c = 3; c <= sqrt(base); c+=2)
+	{
+	  while(base%c == 0){
+		auto it = out.find(c);
+		if (it != out.end())
+		  it->second++;
+		else
+		  out.insert(pair_t(c, 1));
+		base = base/c;
+	  }
+	}   
+
+	//Checking whether the number is actually prime itself.
+	//If base is a composite number, then it would be one upto this point.
+	if (base != 1){
+		out.insert(pair_t(base, 1));
+	}
+	return out;
+}
+
+factors_t FindFactorsPower(int base, int power){
+
+	//Finding factors of base	
+  	factors_t factors = FindFactors(base);
+	//Multiplying the factors by the power
+	for (auto it = factors.begin(); it != factors.end(); it++){
+		it->second *= power;
+	}
+
+	return factors;
+	
+}
 
 int main(){
+
+	unordered_set<factors_t, hash_t> seen_nums;
+	for (int a = 2; a < MAXNUM+1; a++)
+	  for(int b = 2; b < MAXNUM+1; b++){
+	  	factors_t factors = FindFactorsPower(a, b);
+		if (seen_nums.find(factors) == seen_nums.end())
+		  seen_nums.insert(factors);
+	  }
+
+	cout << "The number of unique numbers for the combination for a^b for " << "2 ≤ a,b ≤ " << MAXNUM 
+	     << " is : " << seen_nums.size() << endl;
+
+	factors_t dummy;
+	dummy.insert(pair_t(97, 100));
+	if (seen_nums.find(dummy) != seen_nums.end())
+	  cout << "True\n";
+
+	return 0;
 
 }
