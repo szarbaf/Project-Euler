@@ -13,3 +13,36 @@
  * NOTE: Once the chain starts the terms are allowed to go above one million.
  */
 
+
+#include <iostream>
+#define MAXNUM 14
+
+typedef long long int ll;
+
+using namespace std;
+
+ll ChainLength(int num){
+	ll counter = 1;
+	while (num != 1){
+		if (num%2 == 0)
+		  num = num/2;
+		else
+		  num = 3*num+1;
+		counter++;
+	}
+	return counter;
+}
+int main(){
+
+  ll longest = 0;
+  for (int c = 1; c < MAXNUM; c++){
+  	ll chain_lenght = ChainLength(c);
+	if (chain_lenght > longest)
+	  longest = chain_lenght;
+  }
+
+  cout << "The longest chain lenght under " << MAXNUM << " is : " << longest << endl;
+
+  return 0;
+
+}
