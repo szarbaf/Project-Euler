@@ -15,7 +15,7 @@
 
 
 #include <iostream>
-#define MAXNUM 14
+#define MAXNUM 1e6
 
 typedef long long int ll;
 
@@ -23,25 +23,30 @@ using namespace std;
 
 ll ChainLength(int num){
 	ll counter = 1;
-	while (num != 1){
-		if (num%2 == 0)
-		  num = num/2;
+	ll temp_num = num;
+	while (temp_num != 1){
+		if (temp_num%2 == 0)
+		  temp_num = temp_num/2;
 		else
-		  num = 3*num+1;
+		  temp_num = 3*temp_num+1;
 		counter++;
 	}
 	return counter;
 }
 int main(){
 
-  ll longest = 0;
-  for (int c = 1; c < MAXNUM; c++){
-  	ll chain_lenght = ChainLength(c);
-	if (chain_lenght > longest)
-	  longest = chain_lenght;
+  ll longest = 1;
+  ll longest_chain = 1;
+  for (int c = 2; c < MAXNUM; c++){
+	ll chain_lenght = ChainLength(c);
+	if (chain_lenght > longest_chain){
+	  longest_chain = chain_lenght;
+	  longest = c;
+	}
   }
 
-  cout << "The longest chain lenght under " << MAXNUM << " is : " << longest << endl;
+  cout << "The longest chain lenght under " << MAXNUM << " belongs to " << longest 
+	   << " and the length is " << longest << endl;
 
   return 0;
 
