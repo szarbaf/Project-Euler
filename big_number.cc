@@ -44,6 +44,20 @@ BigNumber BigNumber::operator+(const BigNumber& that){
 
 }
 
+BigNumber BigNumber::operator*(double num){
+  	int carry_over = 0;
+	for (vector<int>::size_type c = 0; c < digits_.size(); c++){
+		int cur_val = digits_[c]*num + carry_over;
+		carry_over = cur_val / 10;
+		digits_[c] = cur_val % 10;
+	}
+
+	if (carry_over != 0)
+	  digits_.push_back(carry_over);
+
+	return *this;
+}
+
 ostream& operator<< (ostream& out, const BigNumber& num){
 
 	for (auto it = num.digits_.rbegin(); it != num.digits_.rend(); it++)

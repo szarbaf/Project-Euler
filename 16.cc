@@ -5,11 +5,23 @@
  */
 
 #include <iostream>
+#include "big_number.h"
 
 using namespace std;
 
-#define POWER 15
+#define POWER 1000
 
 int main(){
+
+	BigNumber big_num = 1;
+	for(int c = 0; c < POWER; c++)
+	  big_num = big_num * 2;
+
+	int sum_of_digits = 0;
+	for (int c = 0; c < big_num.NumDigits(); c++)
+	  sum_of_digits += big_num.digits_[c];
+
+	cout << "The sum of digits for " << POWER << "th power of 2 is " << sum_of_digits << endl;
+	return 0;
 
 }
