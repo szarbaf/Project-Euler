@@ -20,15 +20,21 @@ using namespace std;
 
 int main(){
 	
-  const Date start_date(1, 1990, 1, Monday), end_date(12, 2000, 31);
+  const Date date_one(1, 1, 1900, Monday), date_two(1, 1, 1901), end_date(12, 31, 2000);
   int num_sundays_startOfMonth = 0;
   // Iterating through first of the months and checking whether they are sundays.
-  for (Date cur_date = start_date; cur_date <= end_date; cur_date.AddMonth(1)){
+  for (Date cur_date = date_one; cur_date <= end_date; cur_date.AddMonth(1)){
   	if (cur_date.GetDayOfWeek() == Sunday)
 	  num_sundays_startOfMonth++;
   }
 
-  cout << "The number of sundays between " << start_date << " and " << end_date
+  //Removing the sundays in the range [date_one date_two)
+  for (Date cur_date = date_one; cur_date < date_two; cur_date.AddMonth(1)){
+  	if (cur_date.GetDayOfWeek() == Sunday)
+	  num_sundays_startOfMonth--;
+  }
+
+  cout << "The number of sundays between " << date_two << " and " << end_date
 	<< " is " << num_sundays_startOfMonth << endl;
 
   return 0;

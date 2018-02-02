@@ -12,11 +12,14 @@ typedef struct CurTest{
 
 int main(){
 
-	vector<Test_t> test_cases = {{{2, 9, 1990, Monday}, {2, 10, 1990, Tuesday}, 1}};
+	vector<Test_t> test_cases = {
+			{{2, 9, 1990, Monday}, {2, 10, 1990, Tuesday}, 1}, 
+			{{2, 9, 1990, Monday}, {3, 9, 1990, Tuesday}, 28}	
+	};
 
 	for (auto it = test_cases.begin(); it != test_cases.end(); it++){
-		auto start_date = &it->start_date;
-		auto test_case = Date(start_date->GetMonth(), start_date->GetDay(), start_date->GetYear(), start_date->GetDayOfWeek());
+		const Date& start_date = it->start_date;
+		auto test_case = Date(start_date.GetMonth(), start_date.GetDay(), start_date.GetYear(), start_date.GetDayOfWeek());
 		test_case.AddDay(it->num_days_to_add);
 
 

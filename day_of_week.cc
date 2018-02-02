@@ -18,7 +18,7 @@ bool operator<=(const Date &first, const Date &second){
 }
 
 ostream& operator<<(ostream& stream, const Date& date){
-	stream << date.GetMonth() << "/" << date.GetDay() << "/" << date.GetYear();
+	stream << date.GetMonth() << "/" << date.GetDay() << "/" << date.GetYear() << " " << day_of_week_names[date.GetDayOfWeek()];
 	return stream;
 }
 
@@ -92,4 +92,8 @@ bool operator==(const Date &first, const Date &second){
 }
 bool operator!=(const Date &first, const Date &second){
 	return !(first == second);
+}
+
+bool operator<(const Date &first, const Date &second){
+	return (first <= second && first != second);
 }

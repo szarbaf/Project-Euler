@@ -1,5 +1,7 @@
 
 #include <fstream>
+#include <vector>
+#include <string>
 
 enum DayOfWeek{
 	Monday = 0,
@@ -9,6 +11,16 @@ enum DayOfWeek{
 	Friday,
 	Saturday,
 	Sunday
+};
+
+const std::vector<std::string> day_of_week_names = {
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday"
 };
 
 enum Months{
@@ -44,7 +56,7 @@ class Date{
 	int GetYear() const {return year_;}
 	int GetDayOfWeek() const {return day_of_week_;}
 
-	friend std::ostream& operator<< (std::ostream &stream, const Date& date);
+	//friend std::ostream& operator<< (std::ostream &stream, const Date& date);
   
   private:
 	int year_, month_, day_, day_of_week_;
@@ -52,3 +64,7 @@ class Date{
 bool operator<=(const Date &first, const Date &second);
 bool operator==(const Date &first, const Date &second);
 bool operator!=(const Date &first, const Date &second);
+bool operator<(const Date &first, const Date &second);
+std::ostream& operator<< (std::ostream &stream, const Date& date);
+
+
