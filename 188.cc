@@ -13,6 +13,7 @@ Find the last 8 digits of 1777↑↑1855.
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include <climits>
 
 using namespace std;
 
@@ -37,19 +38,26 @@ ulli CalcPeriod(ulli base, ulli mod_num){
 
 
 ulli PowerMod(ulli base, ulli power, ulli mod_num){
-	ulli out = base;
-	for (ulli c = 0; c < power-1; c++){
-		out *= base;
-		out = out%mod_num;
-	}
 
-	return out;
+  if (power == 1)
+	return base%mod_num;
+
+  ulli out;
+  if (power%2 == 1){
+	out = base*PowerMod(base, power-1, mod_num);
+  }
+  else{
+	ulli moded_base = base*base%mod_num;
+	out = PowerMod(moded_base, power/2, mod_num);
+  }
+
+  return out%mod_num;
 }
 
 ulli PowerPeriod(ulli base, ulli num_base_power, ulli last_power, ulli period){
 
   if (num_base_power > 0 ){
-  ulli new_last_power = PowerMod(base, last_power%period, period);
+	ulli new_last_power = PowerMod(base, last_power%period, period);
 	return PowerPeriod(base, num_base_power-1, new_last_power, period);
 
   }
@@ -57,15 +65,17 @@ ulli PowerPeriod(ulli base, ulli num_base_power, ulli last_power, ulli period){
 	ulli new_last_power = PowerMod(base, last_power%period, (ulli) pow(10, MAX_DIGITS));
 	return new_last_power;
   }
-	
+
 }
 
 int main(){
-	
-	ulli period = CalcPeriod(BASE, pow(10, MAX_DIGITS));
+
+  ulli period = CalcPeriod(BASE, pow(10, MAX_DIGITS));
 
 	cout << "The last " << MAX_DIGITS << " digits of " << BASE << "^^" << HYPER_EXP_POWER 
 	  << " is " << PowerPeriod(BASE, HYPER_EXP_POWER-2, BASE, period) << "." << endl;
+
+	cout << PowerMod(3, 3, 100) << endl;
 
 	return 0;
 	  
