@@ -20,7 +20,6 @@
 #include <string>
 #include <unordered_map>
 #include <math.h>
-#include <gmpxx.h>
 #include <iomanip>
 
 using namespace std;
@@ -29,30 +28,20 @@ using namespace std;
 #define MAXDIGITS 700
 #define MAXNUMREP 10
 
-mpz_class my_power(int base, int power){
 
-	mpz_class out = 1;
-	for(int c = 0; c < power; c++){
-		out *= base;
-	}
-	return out;
-}
 
 string FractionDigits(unsigned int num, unsigned int max_digits){
-	string out;
-	mpf_set_default_prec(MAXDIGITS*10);
-	//mpz_set_default(MAXDIGITS*10);
-	for (unsigned int c = 0; c < max_digits; c++){
-		mpz_class ten_powers = my_power(10, c+1);
-		//cout << "My ten powers are : " << ten_powers << endl;
-	 	mpf_class div = ten_powers / mpf_class(num);
-		mpz_class floored(div);
-		if (div == floored)
-				return string();
-		mpz_class temp = floored % mpz_class(10);
-		int digit = temp.get_si();
-		out.push_back((char)('0' + digit));
+	string out(MAXDIGITS, '0');
+	int denominator = num;
+	int numerator = 1;
+	for (size_t c = 0; c < max_digits; c++){
+		numerator *= 10;
+		out[c] = numerator / denominator;
+		numerator = numerator % denominator;
 	}
+
+	return out;
+}
 
 /*
 	mpf_set_default_prec(MAXDIGITS*2);
@@ -72,9 +61,8 @@ string FractionDigits(unsigned int num, unsigned int max_digits){
 			new_num -= floored;
 	}
 */
-	return out;
-}
 
+/*
 bool IsRepeatedString(string &pattern, string &digits){
 
 		bool is_repeated = true;
@@ -99,38 +87,15 @@ bool IsRepeatedString(string &pattern, string &digits){
 		return is_repeated;
 
 }
-
+*/
 bool FindPattern(string &digits, string *pattern){
 
-	unordered_map<char, vector<int>> seen;
-	int counter = 0;
-	bool not_found = true;
-	for (auto it = digits.begin(); not_found && (it != digits.end()); it++){
-		auto seen_places = seen.find(*it);
-		if (seen_places == seen.end()){
-				vector<int> temp(1, counter);
-				seen[*it] = temp;
-		}
-		else{
-				string temp_digits(digits.begin()+counter, digits.end());
-				vector<int> places = seen_places->second;
-				for (auto init_pos = places.begin(); init_pos != places.end(); init_pos++){
-					string temp_pattern(digits.begin()+*init_pos, digits.begin()+counter);
-					bool is_repeated = IsRepeatedString(temp_pattern, temp_digits);
-					if (is_repeated){
-						*pattern = temp_pattern;
-						not_found = false;
-						break;
-					}
-				}
-				seen[*it].push_back(counter);
-		}
-		counter++;
-	}
+  	
 
 	return !not_found;
-
 }
+
+
 
 int main(){
 
