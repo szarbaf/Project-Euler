@@ -15,8 +15,10 @@
 
 using namespace std;
 
-//constexpr long int kMaxNum = 987654321;
-constexpr long int kMaxNum = 1e7;
+constexpr long int kMaxNum = 987654321;
+//constexpr long int kMaxNum = 1e5;
+
+typedef long long int ll;
 
 vector<int> GetDigits(unsigned long num){
 		vector<int> out;
@@ -72,16 +74,68 @@ bool IsPanDigital(long i, long j, long ixj){
 				return false;
 }
 
+template<class T>
+void PermutateHelper(
+				const vector<T> &cur_vals, 
+				const vector<T> &rem, 
+				vector<vector<T>> &output){
+		if (rem.size() == 0){
+				output.push_back(cur_vals);
+				return;
+		}
+
+		for (int c = 0; c < rem.size(); c++){
+			vector<int> new_cur_vals = cur_vals;
+			new_cur_vals.push_back(rem[c]);
+			vector<T> new_rem(rem.begin(), rem.begin()+c);
+			if (c != rem.size()-1 )
+			   	new_rem.insert(new_rem.end(), rem.begin()+c+1, rem.end());
+
+			//cout << "c : " << c << " rem.size() : " << rem.size() << endl;
+			PermutateHelper(new_cur_vals, new_rem, output);
+		}
+}
+
+template<class T>
+vector<vector<T> >Permutate(const vector<T>& in){
+	
+	vector<vector<T> > output;
+	vector<T> cur_vals;
+	PermutateHelper(cur_vals, in, output);
+	return output;
+
+}
+
+
+ll FromDigits(vector<int> in){
+	ll out = 0;
+	for (auto num : in){
+		out = 10*out + num;
+	}
+
+	return out;
+}
+
 int main(){
 
-		unordered_set<int> seen;
+		unordered_set<ll> seen;
 		long long out = 0;
-		for (int i = 1; i < kMaxNum+1; i++){
-				for (int j = i; i*j < kMaxNum+1; j++)
-						if (IsPanDigital(i, j, i*j) && seen.find(i*j) == seen.end()){
-								out += i*j;
-								seen.insert(i*j);
-						}
+		vector<vector<int> > perms = Permutate(vector<int>({1, 2, 3, 4, 5, 6, 7, 8, 9}) );
+		for (auto perm : perms){
+			for(int i = 1; i < 9; i++)
+					for (int j = i+1; j < 9; j++){
+				
+				ll a = FromDigits( vector<int>(perm.begin(), perm.begin()+i) );
+				ll b = FromDigits( vector<int>(perm.begin()+i, perm.begin()+j) );
+				ll aXb = FromDigits( vector<int>(perm.begin()+j, perm.end()) );
+				if (a*b == aXb && IsPanDigital(a, b, aXb) && seen.find(aXb) == seen.end()){
+					seen.insert(aXb);
+					if (aXb < kMaxNum)
+						cout << a << " " << b << " " << aXb << endl;
+					out += aXb;
+				}
+
+					}
 		}
 
 		cout << "The sum of pandigital products under " << kMaxNum << " is " << out << endl;
