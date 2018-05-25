@@ -30,6 +30,12 @@ vector<bool> IsPrime(ll max_num, ll max_prime, ll *last_prime_index, ll *last_pr
 		return is_prime;
 }
 
+vector<bool> IsPrime(ll max_num){
+
+		ll last_prime, last_prime_index;
+		return IsPrime(max_num, max_num, &last_prime_index, &last_prime);
+
+}
 
 vector<ll> FindDivisors(ll num){
 	ll max_num = sqrt(num);
