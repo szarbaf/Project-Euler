@@ -36,9 +36,10 @@ void NextLargestPanDigital(vector<int> &cur_pan_digital){
 	const int kMaxDigits = cur_pan_digital.size();
 	int i = kMaxDigits - 1, max_index, max_val = INT_MIN;
 	bool found = false;
-	while(i-- >= 0 && !found){
+	while(i >= 1 && !found){
+		i--;
 		for (int j = i+1; j < kMaxDigits; j++)
-			if (cur_pan_digital[i] < cur_pan_digital[j]){
+			if (cur_pan_digital[i] > cur_pan_digital[j]){
 				found = true;
 				if (cur_pan_digital[j] > max_val){
 					max_val = cur_pan_digital[j];
