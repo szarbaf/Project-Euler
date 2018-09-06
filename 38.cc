@@ -62,9 +62,65 @@ void NextLargestPanDigital(vector<int> &cur_pan_digital){
 	
 }
 
+// This function converts the digitis in the range [start, end] into a number.
+int DigitsToNum(vector<int> digits, int start, int end){
+
+  int out = 0;
+  for (int index = start; index < end+1; index++)
+	out = 10*out + digits[index];
+
+  return out;
+}
+
+vector<int> NumToDigits(int num){
+	vector<int> output;
+	while(num > 0){
+		output.push_back(num % 10);
+		num /= 10;
+	}
+
+	reverse(output.begin(), output.end());
+	return output;
+}
+
+bool CheckSubSetRange(vector<int> digits, vector<int> subset, int start){
+	size_t subset_index = 0;
+	for (size_t digits_index = start; digits_index < digits.size() && subset_index < subset.size(); digits_index++, subset_index++)
+	  if (digits[digits_index] != subset[subset_index])
+		return false;
+
+	if (subset_index == subset.size())
+		return true;
+	else
+	  return false;
+}
+
+bool IsConcatProduct(vector<int> cur_pan_digital){
+  	//The maximum possible number for n can have at most 4 digits.
+	for (int c = 0; c < 4; c++) {
+		int n = DigitsToNum(cur_pan_digital, 0, c);
+		int cur_loc = 0;
+		bool success = true;
+		for (int multiplier = 1; success && cur_loc < 9; multiplier++){
+			int new_num = multiplier*n;
+			vector<int> new_num_digits = NumToDigits(new_num);
+			success = CheckSubSetRange(cur_pan_digital, new_num_digits, cur_loc);
+			cur_loc += new_num_digits.size();
+		}
+		if (success && cur_loc == 9)
+		  return true;
+	}
+
+	return false;
+}
+
 int main() {
 
 	vector<int> cur_pan_digital = {9, 8, 7, 6, 5, 4, 3, 2, 1};
+
+	vector<int> test_num = {1, 9, 2, 3, 8, 4, 5, 7, 6};
+	cout << "The test num is concat product ? : " << IsConcatProduct(test_num) << endl;
+
 	while (!IsConcatProduct(cur_pan_digital))
 		NextLargestPanDigital(cur_pan_digital);
 
