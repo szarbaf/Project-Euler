@@ -7,3 +7,9 @@ std::vector<bool> IsPrime(ll max_num, ll max_prime, ll *last_prime_index, ll *la
 std::vector<bool> IsPrime(ll max_num);
 
 std::vector<ll> FindDivisors(ll num);
+
+std::vector<int> GetDigits(int num);
+
+bool IsPanDigital(int num);
+
+void NextLargestPanDigital(std::vector<int> &cur_pan_digital);
