@@ -29,11 +29,37 @@ int main(){
 	ll last_prime_index, last_prime;
 	vector<bool> is_prime = IsPrime(max_prime_index, max_prime_index, &last_prime_index, &last_prime);
 
-	const ll max_try = last_prime + 2*max_square;
+	const ll max_try = last_prime + 2*max_square*max_square;
 	vector<bool> found(max_try, false);
 
-	for (int prime_counter)
 
+	for (ll prime_counter = 2; prime_counter < last_prime+1; prime_counter++)
+	  for (ll square_counter = 1; square_counter < max_square+1; square_counter++){
+	  	if (is_prime[prime_counter-1]) {
+			ll cur_num = prime_counter + 2*square_counter*square_counter;
+			if (cur_num < max_try)
+				found[cur_num-1] = true;
+		}
+	  }
+
+	bool smallest_found = false;
+	ll out;
+	for (int c = 3; (c < max_try) && !smallest_found; c++)
+	  if (!is_prime[c] && (c+1)%2 == 1){
+		if (!found[c]){
+		  out = c+1;
+		  smallest_found = true;
+		}
+		else
+		  cout << "Composite odd number with the property : " << c+1 << endl;
+	  }
+
+	if (smallest_found)
+	  cout << "The smallest interesting composite odd number is : " << out << endl;
+	else
+	  cout << "No composite odd number was found." << endl;
+
+	return 0;
 }
 
 
