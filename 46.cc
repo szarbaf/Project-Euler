@@ -21,8 +21,8 @@ using namespace std;
 
 typedef long long int ll;
 
-constexpr ll max_square = 1e4;
-constexpr ll max_prime_index = 1e4;
+constexpr ll max_square = 1e5;
+constexpr ll max_prime_index = 1e9;
 
 int main(){
 
