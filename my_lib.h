@@ -13,3 +13,9 @@ std::vector<int> GetDigits(int num);
 bool IsPanDigital(int num);
 
 void NextLargestPanDigital(std::vector<int> &cur_pan_digital);
+
+ll MyPowerMod(ll base, ll power, ll mod);
+
+ll MyPowerLastDigits(ll base, ll power, int last_num_digits);
+
+ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits);

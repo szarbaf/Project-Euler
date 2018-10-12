@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <climits>
 
+#include "my_lib.h"
+
 typedef long long int ll;
 
 using namespace std;
@@ -130,4 +132,49 @@ void NextLargestPanDigital(vector<int> &cur_pan_digital){
 	return;
 
 	
+}
+
+ll MyPowerMod(ll base, ll power, ll mod){
+	ll output = 1;
+	while (power > 0){
+		if (power%2==1)
+			output = (output*base) % mod;
+		base = (base*base) % mod;
+		power /= 2;
+	}
+
+	return output;
+}
+
+ll MyPowerLastDigits(ll base, ll power, int last_num_digits){
+	ll output = 1;
+	while (power > 0){
+		if (power%2==1)
+			output = MyMultiplyLastDigits(output, base, last_num_digits);
+		base = MyMultiplyLastDigits(base, base, last_num_digits);
+		power /= 2;
+	}
+
+	return output;
+}
+
+ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits){
+
+  // a = (1e(last_num_digit/2+1) a1 + a2)
+  // b = (1e(last_num_digit/2+1) b1 + b2)
+  // a*b = 1e(last_num_digit+2)a1*b1 + (a1*b2+a2*b1)*1e(last_num_digit/2+1) + a2*b2 
+  // a*b % 1e(last_num_digits) = (a1*b2+a2*b1)*1e(last_num_digit/2+1) + a2*b2
+
+	int half_d = last_num_digits/2+3;
+	ll pow_half_d = static_cast<ll> (pow(10, half_d));
+	ll pow_d = static_cast<ll> (pow(10, last_num_digits));
+
+	ll a2 = a%pow_half_d, b2 = b%pow_half_d;
+	ll a1 = a-a2, b1 = b-b2;
+
+	ll output = ((a1*b2)%pow_d + (a2*b1)%pow_d)%pow_d;
+	output = (output * pow_half_d) % pow_d;
+	output = (output + (a2*b2)%pow_d) % pow_d;
+
+	return output;
 }
