@@ -165,7 +165,7 @@ ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits){
   // a*b = 1e(last_num_digit+2)a1*b1 + (a1*b2+a2*b1)*1e(last_num_digit/2+1) + a2*b2 
   // a*b % 1e(last_num_digits) = (a1*b2+a2*b1)*1e(last_num_digit/2+1) + a2*b2
 
-	int half_d = last_num_digits/2+3;
+	int half_d = last_num_digits/2+1;
 	ll pow_half_d = static_cast<ll> (pow(10, half_d));
 	ll pow_d = static_cast<ll> (pow(10, last_num_digits));
 
@@ -173,7 +173,6 @@ ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits){
 	ll a1 = a-a2, b1 = b-b2;
 
 	ll output = ((a1*b2)%pow_d + (a2*b1)%pow_d)%pow_d;
-	output = (output * pow_half_d) % pow_d;
 	output = (output + (a2*b2)%pow_d) % pow_d;
 
 	return output;

@@ -12,12 +12,15 @@
 using namespace std;
 
 constexpr int kMaxNum = 1000;
-constexpr int last_num_digits = 12;
+constexpr int last_num_digits = 11;
 
 int main(){
 
 	ll output = 0;
 	ll last_digits_mod = static_cast<ll> (pow(10, last_num_digits));
+
+	//MyMultiplyLastDigits(1234567891, 9087654321, 10);
+
 	for (int c = 1; c < kMaxNum+1; c++){
 		ll powered = MyPowerLastDigits(c, c, last_num_digits);
 		output = (output + powered) % last_digits_mod;
