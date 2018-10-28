@@ -10,6 +10,8 @@ std::vector<ll> FindDivisors(ll num);
 
 std::vector<int> GetDigits(int num);
 
+ll GetNum(std::vector<int> digits);
+
 bool IsPanDigital(int num);
 
 void NextLargestPanDigital(std::vector<int> &cur_pan_digital);

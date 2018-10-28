@@ -80,6 +80,14 @@ vector<int> GetDigits(int num){
 	return out;
 }
 
+ll GetNum(vector<int> digits){
+	ll out = 0;
+	for (auto d : digits)
+	  out = 10*out + d;
+
+	return out;
+}
+
 bool IsPanDigital(int num){
 	vector<int> digits = GetDigits(num);
 	sort(digits.begin(), digits.end());
@@ -177,3 +185,5 @@ ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits){
 
 	return output;
 }
+
+
