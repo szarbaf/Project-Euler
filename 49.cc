@@ -15,30 +15,41 @@ using namespace std;
 
 int main(){
 
-  Choose choose(9, 4);
-  Permutate perm(4);
+  Choose choose(9, 4);  
+  Permutate perm;
 
   vector<bool> is_prime = IsPrime(1e4+1);
 
   vector<vector<ll>> out;
 
-  for (int choose_c = 0; choose_c < choose.size(); choose_c++){
-  	vector<int> digits = choose.next();
+  for (int choose_c = 0; choose_c < choose.Size(); choose_c++){
+  	vector<int> digits = choose.Next();
+
+	perm.Reset(3);
 
 	vector<ll> cur_out;
-	for (int perm_c = 0; perm_c < 4; perm_c++){
-	  	perm.Permute(digits);
+	for (int perm_c = 0; perm_c < perm.Size(); perm_c++){
+	  	vector<int> temp = perm.Permute(digits);
+
+		perm.Next();
 		// Checking whether the first digit is zero. If true, it is not actually a 4 digit number.
-		if (digits[0] == 0)
+		if (temp[0] == 0)
 		  continue;
-		ll num = GetNum(digits);
-		
+		ll num = GetNum(temp);
+	
+
+
 		if (is_prime[num-1])
 			cur_out.push_back(num);
-		perm.Next();
 	}
-	if (cur_out.size() == 3)
-	  out.push_back(cur_out);
+	if (cur_out.size() >= 3){
+	  for (int i = 0; i < cur_out.size(); i++){
+		for (int j = i+1; j < cur_out.size(); j++)
+		  for (int k = j+1; k < cur_out.size(); k++)
+			if ( (cur_out[k]-cur_out[j]) == (cur_out[j]-cur_out[i]) )
+		  out.push_back({cur_out[i], cur_out[j], cur_out[k]});
+	  }
+	}
   }
 
   cout << "The interesting series of numbers are : " << endl;
