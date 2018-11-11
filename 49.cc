@@ -40,14 +40,14 @@ int main(){
 
 
 		if (is_prime[num-1])
-			cur_out.push_back(num);
+		  cur_out.push_back(num);
 	}
 	if (cur_out.size() >= 3){
 	  for (int i = 0; i < cur_out.size(); i++){
 		for (int j = i+1; j < cur_out.size(); j++)
 		  for (int k = j+1; k < cur_out.size(); k++)
 			if ( (cur_out[k]-cur_out[j]) == (cur_out[j]-cur_out[i]) )
-		  out.push_back({cur_out[i], cur_out[j], cur_out[k]});
+			  out.push_back({cur_out[i], cur_out[j], cur_out[k]});
 	  }
 	}
   }

@@ -79,10 +79,10 @@ vector<int> Permutate::Permute(const vector<int>& digits){
 //
 Choose::Choose(int n, int k) : n_(n), k_(k){
 	state_.reserve(k);
-	for (int c = 1; c < k; c++)
+	for (int c = 0; c < k-1; c++)
   		state_.push_back(c);
-	state_.push_back(k-1);
-	size_ = Factorial(n) / (Factorial(k)*Factorial(n-k));	
+	state_.push_back(k-2);
+	size_ = Factorial(n+1) / (Factorial(k)*Factorial(n-k+1));	
 }
 
 vector<int> Choose::Next(){
