@@ -1,5 +1,8 @@
 #include <vector>
+#include <tuple>
+
 typedef long long int ll;
+typedef std::tuple<std::vector<int>, std::vector<int>> factor_t;
 
 void SetNotPrime(std::vector<bool> *is_prime, ll num, ll max_num);
 
@@ -21,3 +24,5 @@ ll MyPowerMod(ll base, ll power, ll mod);
 ll MyPowerLastDigits(ll base, ll power, int last_num_digits);
 
 ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits);
+
+factor_t GetFactors(int base);

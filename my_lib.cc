@@ -2,6 +2,7 @@
 #include <cmath>
 #include <algorithm>
 #include <climits>
+#include <functional>
 
 #include "my_lib.h"
 
@@ -187,3 +188,49 @@ ll MyMultiplyLastDigits(ll a, ll b, int last_num_digits){
 }
 
 
+factor_t GetFactors(int base){
+	factor_t out;
+	vector<int> factors, powers;
+	size_t factor_counter = 0; 
+	//Extracting the powers two
+	if (base %2 == 0)
+		factor_counter++;
+	while(base%2 == 0){
+		// Determining the first time.
+		if (factors.size() != factor_counter){
+			factors.push_back(2);
+			powers.push_back(1);
+		}
+		else
+			powers[factor_counter]++;
+		base = base/2;
+	}
+
+
+
+	//Extracting the powers starting from three
+
+	for (int c = 3; c <= sqrt(base); c+=2)
+	{
+		if (base%c == 0)
+			factor_counter++;
+		while(base%c == 0){
+
+			if (factors.size() != factor_counter){
+				factors.push_back(c);
+				powers.push_back(1);
+			}
+			else
+				powers[factor_counter]++;
+			base = base/c;
+		}
+	}   
+
+	//Checking whether the number is actually prime itself.
+	//If base is a composite number, then it would be one upto this point.
+	if (base != 1){
+		factors.push_back(base);
+		powers.push_back(1);
+	}
+	return make_tuple(factors, powers);
+}
